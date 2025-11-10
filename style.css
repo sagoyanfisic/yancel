@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.bio {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    font-size: 1rem;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+main {
+    padding: 40px;
+}
+
+main h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #667eea;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.repositories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.repo-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #e9ecef;
+}
+
+.repo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    border-color: #667eea;
+}
+
+.repo-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: block;
+}
+
+.repo-name:hover {
+    text-decoration: underline;
+}
+
+.repo-description {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    min-height: 45px;
+}
+
+.repo-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.repo-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.language {
+    display: inline-block;
+    padding: 5px 12px;
+    background: #667eea;
+    color: white;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+footer {
+    background: #f8f9fa;
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    border-top: 2px solid #e9ecef;
+}
+
+@media (max-width: 768px) {
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-info h1 {
+        font-size: 2rem;
+    }
+
+    .repositories-grid {
+        grid-template-columns: 1fr;
+    }
+}

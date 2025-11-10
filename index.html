@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Repositorios - GitHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="profile-section">
+                <img id="avatar" src="" alt="Avatar" class="avatar">
+                <div class="profile-info">
+                    <h1 id="username">Cargando...</h1>
+                    <p id="bio" class="bio"></p>
+                    <div class="profile-stats">
+                        <span id="followers" class="stat"></span>
+                        <span id="following" class="stat"></span>
+                        <span id="public-repos" class="stat"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <h2>Mis Repositorios</h2>
+            <div id="loading" class="loading">Cargando repositorios...</div>
+            <div id="repositories" class="repositories-grid"></div>
+        </main>
+
+        <footer>
+            <p>Powered by GitHub API</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
