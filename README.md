@@ -1,39 +1,147 @@
-# yancel
+# GitHub Portfolio
 
-GitHub Pages site displaying personal repository information.
+Portafolio moderno que muestra tus repositorios de GitHub con modo oscuro, búsqueda y filtros.
 
-## Features
+## Características
 
-- **User Profile**: Displays your GitHub avatar, name, bio, and statistics
-- **Repository Grid**: Shows all your repositories with details including:
-  - Stars and forks count
-  - Last updated date
-  - Programming language
-  - Repository description
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Dynamic Content**: Fetches real-time data from the GitHub API
+- 🌓 **Modo Oscuro/Claro** con persistencia
+- 🔍 **Búsqueda en tiempo real** por nombre o descripción
+- 🏷️ **Filtros** por lenguaje y ordenamiento
+- 📱 **Responsive** - funciona en móviles
+- ⚡ **Caché inteligente** (5 minutos)
+- 🎨 **Animaciones suaves**
 
-## How to Enable GitHub Pages
+## Instalación Rápida
 
-1. Go to your repository on GitHub
-2. Click on **Settings**
-3. Navigate to **Pages** in the left sidebar
-4. Under **Source**, select the branch you want to deploy (e.g., `main` or `copilot/add-github-page-for-repositories`)
-5. Click **Save**
-6. Your site will be published at: `https://sagoyanfisic.github.io/yancel/`
+### 1. Configura tu usuario
 
-## Files
+Edita [script.js](script.js) línea 3:
+```javascript
+username: 'tu-usuario-github',
+```
 
-- `index.html` - Main HTML page structure
-- `style.css` - Styling and responsive design
-- `script.js` - JavaScript for fetching and displaying GitHub data
+### 2. Habilita GitHub Pages
 
-## Local Development
+1. **Settings** → **Pages**
+2. **Source**: `GitHub Actions`
+3. Push a `main`
 
-To test the site locally:
+Tu sitio: `https://tu-usuario.github.io/nombre-repo/`
+
+---
+
+## AWS App Config (Opcional)
+
+Cambia colores sin tocar código. **2 workflows separados:**
+
+### Workflow 1: Fetch Config
+Trae JSON desde AWS → Commit → Push
+
+### Workflow 2: Deploy
+Despliega a GitHub Pages
+
+```json
+{
+  "primaryColor": "#ff6b6b",
+  "secondaryColor": "#ee5a6f",
+  "siteTitle": "Mi Portfolio",
+  "pageTitle": "Mis Proyectos"
+}
+```
+
+<details>
+<summary><b>📋 Setup (expandir)</b></summary>
+
+### 1. Crear en AWS:
+```bash
+# App
+aws appconfig create-application --name "github-portfolio" --region us-east-1
+
+# Entorno
+aws appconfig create-environment --application-id <APP_ID> --name "production" --region us-east-1
+
+# Perfil
+aws appconfig create-configuration-profile --application-id <APP_ID> --name "config" --location-uri "hosted" --region us-east-1
+
+# Subir JSON
+aws appconfig create-hosted-configuration-version \
+  --application-id <APP_ID> \
+  --configuration-profile-id <PROFILE_ID> \
+  --content-type "application/json" \
+  --content fileb://config.example.json \
+  --region us-east-1
+```
+
+### 2. Secrets en GitHub:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`
+- `AWS_APPCONFIG_APPLICATION_ID`
+- `AWS_APPCONFIG_ENVIRONMENT_ID`
+- `AWS_APPCONFIG_CONFIGURATION_PROFILE_ID`
+
+### 3. Usar:
+- **Actions** → **Fetch Config from AWS** → **Run workflow**
+- Automático: Se ejecuta cada 6 horas
+
+</details>
+
+---
+
+## Desarrollo Local
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open `http://localhost:8080` in your browser.
+Abre: `http://localhost:8080`
+
+---
+
+## Personalización
+
+### Cambiar Colores (sin AWS)
+[style.css](style.css) líneas 2-3:
+```css
+--primary-color: #667eea;
+--secondary-color: #764ba2;
+```
+
+### Esquemas Pre-hechos
+
+**Océano** 🌊: `#0077be` / `#00a8e8`
+**Atardecer** 🌅: `#ff6b6b` / `#ee5a6f`
+**Bosque** 🌲: `#26de81` / `#20bf6b`
+**Nocturno** 🌙: `#5f27cd` / `#341f97`
+
+---
+
+## Estructura
+
+```
+yancel/
+├── .github/
+│   ├── scripts/
+│   │   └── apply-config.sh         # Aplica config a archivos
+│   └── workflows/
+│       ├── fetch-config.yml        # Trae config de AWS
+│       └── deploy.yml              # Despliega a Pages
+├── index.html
+├── style.css
+├── script.js
+├── config.example.json
+└── README.md
+```
+
+---
+
+## Stack
+
+- HTML5, CSS3, JavaScript ES6+
+- GitHub API
+- GitHub Actions
+- AWS App Config (opcional)
+
+---
+
+⭐ Dale una estrella si te fue útil!

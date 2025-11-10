@@ -1,0 +1,40 @@
+# Configuración compilada (generada automáticamente)
+config.compiled.json
+
+# Configuración local (no commitear credenciales)
+config.json
+
+# Node modules (si se usan)
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporal
+*.tmp
+*.temp
+.cache/
