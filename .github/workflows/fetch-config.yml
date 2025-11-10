@@ -19,23 +19,31 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
-        if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-west-2' }}
 
       - name: Fetch configuration from AWS App Config
-        if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
         run: |
-          # Obtener configuración
-          aws appconfig get-configuration \
-            --application "${{ secrets.AWS_APPCONFIG_APPLICATION_ID }}" \
-            --environment "${{ secrets.AWS_APPCONFIG_ENVIRONMENT_ID }}" \
-            --configuration "${{ secrets.AWS_APPCONFIG_CONFIGURATION_PROFILE_ID }}" \
-            --client-id "github-actions-$(date +%s)" \
-            config.json || echo "{}" > config.json
+          echo "🔍 Obteniendo última versión de configuración..."
+
+          # Obtener la versión más reciente
+          VERSION_NUMBER=$(aws appconfig list-hosted-configuration-versions \
+            --application-id "${{ secrets.AWS_APPCONFIG_APPLICATION_ID }}" \
+            --configuration-profile-id "${{ secrets.AWS_APPCONFIG_CONFIGURATION_PROFILE_ID }}" \
+            --query "Items[0].VersionNumber" \
+            --output text)
+
+          echo "Versión más reciente: $VERSION_NUMBER"
+
+          # Descargar la configuración
+          aws appconfig get-hosted-configuration-version \
+            --application-id "${{ secrets.AWS_APPCONFIG_APPLICATION_ID }}" \
+            --configuration-profile-id "${{ secrets.AWS_APPCONFIG_CONFIGURATION_PROFILE_ID }}" \
+            --version-number "$VERSION_NUMBER" \
+            config.json
 
           echo "📋 Configuración obtenida:"
           cat config.json
@@ -43,7 +51,7 @@ jobs:
       - name: Apply configuration
         run: |
           chmod +x .github/scripts/apply-config.sh
-          .github/scripts/apply-config.sh || echo "⚠️ No se aplicó configuración"
+          .github/scripts/apply-config.sh || echo "No se aplicó configuración"
 
       - name: Commit and push changes
         run: |
@@ -53,17 +61,21 @@ jobs:
           git add -A
 
           if git diff --staged --quiet; then
-            echo "✅ No hay cambios para commitear"
+            echo "No hay cambios para commitear"
           else
             git commit -m "chore: update config from AWS App Config [skip ci]"
             git push
-            echo "✅ Configuración actualizada y pusheada"
-
-            # Trigger deploy workflow
-            echo "🚀 Triggering deploy..."
-            curl -X POST \
-              -H "Accept: application/vnd.github.v3+json" \
-              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy.yml/dispatches \
-              -d '{"ref":"main"}'
+            echo "Configuración actualizada y pusheada"
           fi
+
+      - name: Trigger deploy workflow
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'main'
+            })

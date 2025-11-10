@@ -77,8 +77,9 @@ aws appconfig create-hosted-configuration-version \
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_REGION`
 - `AWS_APPCONFIG_APPLICATION_ID`
-- `AWS_APPCONFIG_ENVIRONMENT_ID`
 - `AWS_APPCONFIG_CONFIGURATION_PROFILE_ID`
+
+**Nota**: Ya no necesitas `ENVIRONMENT_ID`, el workflow obtiene el último deployment automáticamente.
 
 ### 3. Usar:
 - **Actions** → **Fetch Config from AWS** → **Run workflow**
